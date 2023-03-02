@@ -21,4 +21,11 @@ func main() {
 	for _, item := range emojies {
 		fmt.Println(item.Info())
 	}
+
+	randomEmoji, err := emojiClient.GetRandomEmoji()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("RANDOM:", randomEmoji.Info())
 }

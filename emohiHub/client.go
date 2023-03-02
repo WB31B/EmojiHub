@@ -47,3 +47,26 @@ func (c Client) GetEmojies() ([]EmojiData, error) {
 
 	return emStore, nil
 }
+
+func (c Client) GetRandomEmoji() (EmojiData, error) {
+	resp, err := c.client.Get("https://emojihub.yurace.pro/api/random")
+	if err != nil {
+		return EmojiData{}, err
+	}
+
+	defer resp.Body.Close()
+
+	fmt.Println("Responce status:", resp.StatusCode)
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return EmojiData{}, err
+	}
+
+	var emStore randomEmoji
+	if err = json.Unmarshal(body, &emStore); err != nil {
+		return EmojiData{}, err
+	}
+
+	return EmojiData(emStore), nil
+}
