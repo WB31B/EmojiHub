@@ -2,8 +2,9 @@ package emohihub
 
 import "fmt"
 
-type emojiesStore []EmojiData
+// type emojiesStore []EmojiData
 type randomEmoji EmojiData
+type emojiesStore []EmojiData
 
 type EmojiData struct {
 	Name     string   `json:"name"`
