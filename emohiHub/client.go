@@ -33,7 +33,49 @@ func (c Client) GetEmojies() ([]EmojiData, error) {
 
 	defer resp.Body.Close()
 
-	fmt.Println("Responce status:", resp.StatusCode)
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var emStore emojiesStore
+	if err = json.Unmarshal(body, &emStore); err != nil {
+		return nil, err
+	}
+
+	return emStore, nil
+}
+
+func (c Client) GetCategoryEmojies(name string) ([]EmojiData, error) {
+	url := fmt.Sprintf("https://emojihub.yurace.pro/api/all/category/%s", name)
+	resp, err := c.client.Get(url)
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var emStore emojiesStore
+	if err = json.Unmarshal(body, &emStore); err != nil {
+		return nil, err
+	}
+
+	return emStore, nil
+}
+
+func (c Client) GetGroupEmojies(name string) ([]EmojiData, error) {
+	url := fmt.Sprintf("https://emojihub.yurace.pro/api/all/group/%s", name)
+	resp, err := c.client.Get(url)
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -56,7 +98,49 @@ func (c Client) GetRandomEmoji() (EmojiData, error) {
 
 	defer resp.Body.Close()
 
-	fmt.Println("Responce status:", resp.StatusCode)
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return EmojiData{}, err
+	}
+
+	var emStore randomEmoji
+	if err = json.Unmarshal(body, &emStore); err != nil {
+		return EmojiData{}, err
+	}
+
+	return EmojiData(emStore), nil
+}
+
+func (c Client) GetGroupRandomEmoji(name string) (EmojiData, error) {
+	url := fmt.Sprintf("https://emojihub.yurace.pro/api/random/group/%s", name)
+	resp, err := c.client.Get(url)
+	if err != nil {
+		return EmojiData{}, err
+	}
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return EmojiData{}, err
+	}
+
+	var emStore randomEmoji
+	if err = json.Unmarshal(body, &emStore); err != nil {
+		return EmojiData{}, err
+	}
+
+	return EmojiData(emStore), nil
+}
+
+func (c Client) GetCategoryRandomEmoji(name string) (EmojiData, error) {
+	url := fmt.Sprintf("https://emojihub.yurace.pro/api/random/category/%s", name)
+	resp, err := c.client.Get(url)
+	if err != nil {
+		return EmojiData{}, err
+	}
+
+	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
