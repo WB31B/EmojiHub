@@ -7,55 +7,45 @@ import (
 	"time"
 )
 
+func printError(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func main() {
 	emojiClient, err := emohihub.NewClient(time.Second * 10)
-	if err != nil {
-		log.Fatal(err)
-	}
+	printError(err)
 
 	emojies, err := emojiClient.GetEmojies()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	for _, item := range emojies {
-		fmt.Println(item.Info())
-	}
+	printError(err)
 
 	emojiesCategory, err := emojiClient.GetCategoryEmojies("travel-and-places")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	for _, item := range emojiesCategory {
-		fmt.Println("[Emojo-Category]:", item.Info())
-	}
+	printError(err)
 
 	emojiesGroup, err := emojiClient.GetGroupEmojies("animal-bird")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	for _, item := range emojiesGroup {
-		fmt.Println("[Emoji-Group]:", item.Info())
-	}
+	printError(err)
 
 	randomEmoji, err := emojiClient.GetRandomEmoji()
-	if err != nil {
-		log.Fatal(err)
-	}
+	printError(err)
 
-	groupRandomEmoji, err := emojiClient.GetGroupRandomEmoji("face-positive")
-	if err != nil {
-		log.Fatal(err)
-	}
+	groupRandomEmoji, err := emojiClient.GetRandomGroup("face-positive")
+	printError(err)
 
-	categoryRandomEmoji, err := emojiClient.GetCategoryRandomEmoji("food-and-drink")
-	if err != nil {
-		log.Fatal(err)
-	}
+	categoryRandomEmoji, err := emojiClient.GetRandomCategory("food-and-drink")
+	printError(err)
 
-	fmt.Println("[Random-Emoji]:", randomEmoji.Info())
-	fmt.Println("[Group-Random]:", groupRandomEmoji.Info())
-	fmt.Println("[Category-Random]: ", categoryRandomEmoji.Info())
+	printEmojies("Emojies:", emojies)
+	printEmojies("Emojies category:", emojiesCategory)
+	printEmojies("Emojies group:", emojiesGroup)
+
+	fmt.Println("Random emoji:", randomEmoji.Info())
+	fmt.Println("Random group:", groupRandomEmoji.Info())
+	fmt.Println("Random category:", categoryRandomEmoji.Info())
+}
+
+func printEmojies(title string, typeEmoji []emohihub.EmojiData) {
+	for _, item := range typeEmoji {
+		fmt.Println(title, item.Info())
+	}
 }
